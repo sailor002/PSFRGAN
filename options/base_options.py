@@ -92,7 +92,9 @@ class BaseOptions():
 
         # save and return the parser
         self.parser = parser
-        return parser.parse_args()
+        my_args, _ = parser.parse_known_args()
+        return my_args
+        #return parser.parse_args()
 
     def print_options(self, opt):
         """Print and save options
