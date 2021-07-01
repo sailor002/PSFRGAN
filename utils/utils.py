@@ -85,7 +85,7 @@ def batch_tensor_to_img(tensor, size=None):
     out_imgs = batch_numpy_to_image(arrays, size)
     return out_imgs 
 
-def color_parse_map(tensor, size=None):
+def color_parse_map(tensor, size=None, focus=-1):
     """
     input: tensor or batch tensor
     return: colorized parsing maps
@@ -100,7 +100,12 @@ def color_parse_map(tensor, size=None):
     for t in tensor:
         tmp_img = np.zeros(tensor.shape[1:] + (3,))        
         for idx, color in enumerate(MASK_COLORMAP):
-            tmp_img[t == idx] = color
+            if focus == -1:
+              tmp_img[t == idx] = color
+            elif focus == 1:
+              tmp_img[t == idx] = color if color == [0, 0, 0] else [1, 1, 1]
+            elif focus == 0:
+              tmp_img[t == idx] = [0, 0, 0] if color != [0, 0, 0] else [1, 1, 1]
         if size is not None:
             tmp_img = cv.resize(tmp_img, (size, size))
         color_maps.append(tmp_img.astype(np.uint8))
